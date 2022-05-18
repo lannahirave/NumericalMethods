@@ -22,7 +22,7 @@ public class Task1
         else Console.WriteLine("Matrix:");
         foreach (var list in Matrix)
         {
-            foreach (var num in list) Console.Write($"{num,3} ");
+            foreach (var num in list) Console.Write($"{$"{num:0.00000}"} ");
             Console.WriteLine();
         }
     }
@@ -32,7 +32,8 @@ public class Task1
         Console.WriteLine("Inverse matrix:");
         foreach (var list in InverseMatrix)
         {
-            foreach (var num in list) Console.Write($"{num,3} ");
+            for (int i = 0; i < size; i++) 
+                Console.Write($"{list[i]:0.0000} ");
             Console.WriteLine();
         }
     }
@@ -51,8 +52,22 @@ public class Task1
 
         //Gauss elimination
         double ratio;
+        //Geting inverse matrix +
+        for (int pos = size - 1; pos >= 0; pos--)
+        {
+            ratio = Matrix[pos][pos];
+            if (ratio != 0)
+                for (int col = size; col >= 0; col--)
+                {
+                    Matrix[pos][col] /= ratio;
+                    InverseMatrix[pos][col] /= ratio;
+                }
+        }
+        DisplayMatrix(125125);
+        DisplayInverseMatrix();
         for (var i = 0; i < size; i++)
         {
+            // ROW MAIN
             for (var j = i + 1; j < size; j++)
             {
                 // Getting ratio
@@ -60,21 +75,14 @@ public class Task1
                 for (var k = i; k <= size; k++)
                 {
                     // Eliminating to Upper Triangle Matrix
-                    Matrix[j][k] = Matrix[j][k] - ratio * Matrix[i][k];
+                    Matrix[j][k] -= ratio * Matrix[i][k];
                     // Finding Inverse Matrix
-                    InverseMatrix[j][k] = InverseMatrix[j][k] - ratio * InverseMatrix[i][k];
+                    InverseMatrix[j][k] -= ratio * InverseMatrix[i][k];
                 }
             }
             DisplayMatrix(i);
         }
-
-
-        // finding Inverse Matrix
-        for (int i = size - 2; i >= 0; i--)
-        for (int j = 0; j < size; j++)
-        for (int k = i + 1; k < size; k++)
-            InverseMatrix[i][j] -= InverseMatrix[k][j] * Matrix[i][k];
-        DisplayInverseMatrix();
+        
         // Matrix is Upper Triangle now
         var answers = Enumerable.Repeat(0.0, size).ToList();
         // Getting solution
@@ -88,7 +96,26 @@ public class Task1
 
             answers[i] = answers[i] / Matrix[i][i];
         }
+        
+        
+        DisplayMatrix(1241241124);
+        DisplayInverseMatrix();
+        
+        for (int pos = size - 1; pos >= 0; pos--)
+        {
+            for (int row = pos-1; row >= 0; row--)
+            {
+                ratio = Matrix[row][pos];
+                if (ratio == 0) continue;
+                Matrix[row][size] -= ratio * Matrix[pos][size];
+                Matrix[row][pos] -= ratio * Matrix[pos][pos];
+                InverseMatrix[row][pos] -= ratio * InverseMatrix[pos][pos];
+            }
+            DisplayInverseMatrix();
+        }
+        DisplayMatrix(124124);
 
+        DisplayInverseMatrix();
         Console.WriteLine("Solution:");
         for (var i = 0; i < size; i++) Console.WriteLine($"x{i + 1} = {answers[i],4}");
     }
