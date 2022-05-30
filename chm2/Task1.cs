@@ -22,7 +22,7 @@ public class Task1
         else Console.WriteLine("Matrix:");
         foreach (var list in Matrix)
         {
-            foreach (var num in list) Console.Write($"{$"{num:0.00000}"} ");
+            foreach (var num in list) Console.Write($"{num:0.00000} ");
             Console.WriteLine();
         }
     }
@@ -32,7 +32,7 @@ public class Task1
         Console.WriteLine("Inverse matrix:");
         foreach (var list in InverseMatrix)
         {
-            for (int i = 0; i < size; i++) 
+            for (var i = 0; i < size; i++)
                 Console.Write($"{list[i]:0.0000} ");
             Console.WriteLine();
         }
@@ -49,22 +49,9 @@ public class Task1
         InverseMatrix.Add(new List<double>() {0, 0, 1, 0, 0});
         InverseMatrix.Add(new List<double>() {0, 0, 0, 1, 0});
 
-
         //Gauss elimination
         double ratio;
-        //Geting inverse matrix +
-        for (int pos = size - 1; pos >= 0; pos--)
-        {
-            ratio = Matrix[pos][pos];
-            if (ratio != 0)
-                for (int col = size; col >= 0; col--)
-                {
-                    Matrix[pos][col] /= ratio;
-                    InverseMatrix[pos][col] /= ratio;
-                }
-        }
-        DisplayMatrix(125125);
-        DisplayInverseMatrix();
+
         for (var i = 0; i < size; i++)
         {
             // ROW MAIN
@@ -82,6 +69,35 @@ public class Task1
             }
             DisplayMatrix(i);
         }
+
+        double det = 1;
+        for (var i = 0; i < size; i++) det *= Matrix[i][i];
+
+        //Geting inverse matrix +
+        for (var pos = size - 1; pos >= 0; pos--)
+        {
+            ratio = Matrix[pos][pos];
+            if (ratio != 0)
+                for (var col = size; col >= 0; col--)
+                {
+                    Matrix[pos][col] /= ratio;
+                    InverseMatrix[pos][col] /= ratio;
+                }
+        }
+
+        // 5 2 1 0 = 14
+        // 1 3 2 8 = 65 
+        // 4 -6 1 0 = -3
+        // 5 0 3 2 = 32
+        for (var pos = size - 1; pos >= 0; pos--)
+        for (var row = pos - 1; row >= 0; row--)
+        {
+            ratio = Matrix[row][pos];
+            Matrix[row][size] -= ratio * Matrix[pos][size];
+            Matrix[row][pos] -= ratio * Matrix[pos][pos];
+            InverseMatrix[row][size] -= ratio * InverseMatrix[pos][size];
+            InverseMatrix[row][pos] -= ratio * InverseMatrix[pos][pos];
+        }
         
         // Matrix is Upper Triangle now
         var answers = Enumerable.Repeat(0.0, size).ToList();
@@ -96,27 +112,11 @@ public class Task1
 
             answers[i] = answers[i] / Matrix[i][i];
         }
-        
-        
-        DisplayMatrix(1241241124);
-        DisplayInverseMatrix();
-        
-        for (int pos = size - 1; pos >= 0; pos--)
-        {
-            for (int row = pos-1; row >= 0; row--)
-            {
-                ratio = Matrix[row][pos];
-                if (ratio == 0) continue;
-                Matrix[row][size] -= ratio * Matrix[pos][size];
-                Matrix[row][pos] -= ratio * Matrix[pos][pos];
-                InverseMatrix[row][pos] -= ratio * InverseMatrix[pos][pos];
-            }
-            DisplayInverseMatrix();
-        }
-        DisplayMatrix(124124);
 
+        DisplayMatrix(null);
         DisplayInverseMatrix();
         Console.WriteLine("Solution:");
-        for (var i = 0; i < size; i++) Console.WriteLine($"x{i + 1} = {answers[i],4}");
+        for (var i = 0; i < size; i++) Console.WriteLine($"x{i + 1} = {answers[i]:.0000}");
+        Console.WriteLine($"Det:{det}");
     }
 }
