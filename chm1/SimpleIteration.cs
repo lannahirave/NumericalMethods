@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 namespace chm1;
 
-public class Task3
+public class Simple
 {
-    public Task3(double e = 1e-3)
+    public Simple(double e = 1e-3)
     {
         Eps = e;
-        Simple();
+        SimpleIter();
     }
-    static double F(double x) => Math.Pow(x, 3) + Math.Pow(x, 2) - 4 * x - 4;
-    static double G(double x) => Math.Pow((4 * x + 4 - x * x), (double)1/3);
+    static double F(double x) => Math.Pow(x, 4) + 4*x - 2;
+    static double G(double x) => 0.25*(2-Math.Pow(x, 4));
     
     private double Eps;
-    void Simple()
+    void SimpleIter()
     {
-        double xn = 2.5;
+        double xn = 0.5;
         double xnplus1;
         int i = 1;
         while (true)
@@ -30,6 +30,6 @@ public class Task3
             xn = xnplus1;
             Console.WriteLine($"{i}-th iteration: {xnplus1} {F(xnplus1)}");
             i++;
-        }
+        }   
     }
 }
