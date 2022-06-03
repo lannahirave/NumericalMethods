@@ -17,7 +17,7 @@ public class Task2
 
     private double eps;
     private int size;
-
+    
     private void Tridiagonal()
     {
         Matrix.Add(new List<double>() {2, 4, 0, 20});
